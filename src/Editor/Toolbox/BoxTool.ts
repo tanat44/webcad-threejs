@@ -10,18 +10,27 @@ enum ToolState {
   SecondClick,
 }
 
-export class RectangleTool extends ToolBase {
+export class BoxTool extends ToolBase {
   tempObject: Mesh;
   state: ToolState = ToolState.Idle;
 
   constructor(graphic: Graphic, editor: Editor) {
-    super(graphic, editor, editor.ui.controlPanel.rectangleButton);
+    super(graphic, editor, editor.ui.controlPanel.boxButton);
   }
 
   override activate(): void {
     super.activate();
     this.state = ToolState.Idle;
     if (this.tempObject) throw new Error("Temporary object already exists");
+  }
+
+  override deactivate(): void {
+    super.deactivate();
+    if (this.tempObject) {
+      this.tempObject.geometry.dispose();
+      this.graphic.scene.remove(this.tempObject);
+      this.tempObject = null;
+    }
   }
 
   protected override overrideMouseMove(e: MouseEvent): void {

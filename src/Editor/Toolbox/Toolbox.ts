@@ -1,8 +1,8 @@
 import { Graphic } from "../../Graphic/Graphic";
 import { Editor } from "../Editor";
+import { BoxTool } from "./BoxTool";
 import { CylinderTool } from "./CylinderTool";
 import { MeasureTool } from "./MeasureTool";
-import { RectangleTool } from "./RectangleTool";
 import { ToolBase } from "./ToolBase";
 
 export class Toolbox {
@@ -11,7 +11,7 @@ export class Toolbox {
 
   constructor(graphic: Graphic, editor: Editor) {
     this.tools = [];
-    this.tools.push(new RectangleTool(graphic, editor));
+    this.tools.push(new BoxTool(graphic, editor));
     this.tools.push(new CylinderTool(graphic, editor));
     this.tools.push(new MeasureTool(graphic, editor));
 

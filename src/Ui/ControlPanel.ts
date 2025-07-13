@@ -5,14 +5,14 @@ export class ControlPanel {
   graphic: Graphic;
 
   // buttons
-  rectangleButton: Button;
+  boxButton: Button;
   cylinderButton: Button;
   measureButton: Button;
 
   constructor(graphic: Graphic) {
     this.graphic = graphic;
     const dom = document.getElementById("controlPanel");
-    this.rectangleButton = new Button("rectangle", "r", dom);
+    this.boxButton = new Button("box", "b", dom);
     this.cylinderButton = new Button("cylinder", "c", dom);
     this.measureButton = new Button("measure", "m", dom);
   }
