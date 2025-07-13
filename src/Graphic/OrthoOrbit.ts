@@ -1,22 +1,21 @@
 import {
   Box3,
   OrthographicCamera,
-  Plane,
   Quaternion,
-  Raycaster,
   ShaderMaterial,
   Vector2,
   Vector3,
 } from "three";
+import { CursorHelper } from "./CursorHelper";
 import { Graphic } from "./Graphic";
 
 const ORBIT_RADIUS = 100;
 
 export class OrthoOrbit {
+  private graphic: Graphic;
+  private cursorHelper: CursorHelper;
   private camera: OrthographicCamera;
   private domElement: HTMLElement;
-  private rayCaster: Raycaster;
-  private graphic: Graphic;
 
   private cameraStartPosition: Vector3 | null = null;
   private mouseDownScreen: Vector2 | null = null;
@@ -24,33 +23,36 @@ export class OrthoOrbit {
   private zoom: number = 1;
 
   constructor(camera: OrthographicCamera, graphic: Graphic) {
-    this.camera = camera;
-    this.domElement = graphic.renderer.domElement;
-    this.rayCaster = new Raycaster();
     this.graphic = graphic;
+    this.camera = camera;
 
+    // listen to dom
+    this.domElement = graphic.renderer.domElement;
     this.domElement.addEventListener("mousedown", this.onMouseDown.bind(this));
     this.domElement.addEventListener("mousemove", this.onMouseMove.bind(this));
     this.domElement.addEventListener("mouseup", this.onMouseUp.bind(this));
     this.domElement.addEventListener("wheel", this.onWheel.bind(this), {
       passive: true,
     });
-    window.addEventListener("resize", this.onWindowResize.bind(this));
   }
 
   render() {}
 
   private onMouseDown(event: MouseEvent): void {
-    this.mouseDownScreen = this.getMouseScreenPosition(event);
-    this.viewCenter = this.findGroundIntersection(new Vector2());
+    this.mouseDownScreen =
+      this.graphic.cursorHelper.getMouseScreenPosition(event);
+    this.viewCenter = this.graphic.cursorHelper.findGroundIntersection(
+      new Vector2()
+    );
     this.cameraStartPosition = this.camera.position.clone();
   }
 
   private onMouseMove(event: MouseEvent): void {
     if (!this.mouseDownScreen) return;
 
-    const newScreenPos = this.getMouseScreenPosition(event);
-    const newWorldPos = this.unproject(newScreenPos);
+    const newScreenPos =
+      this.graphic.cursorHelper.getMouseScreenPosition(event);
+    const newWorldPos = this.graphic.cursorHelper.unproject(newScreenPos);
     if (!newWorldPos) return;
 
     const button = event.buttons;
@@ -79,7 +81,7 @@ export class OrthoOrbit {
       // right click = pan
       const move = newWorldPos
         .clone()
-        .sub(this.unproject(this.mouseDownScreen))
+        .sub(this.graphic.cursorHelper.unproject(this.mouseDownScreen))
         .multiplyScalar(2);
       const newCamera = this.cameraStartPosition
         .clone()
@@ -137,46 +139,15 @@ export class OrthoOrbit {
     } else {
       zoom /= 1.1; // Zoom out
     }
-    this.updateZoom(zoom, this.getMouseScreenPosition(event));
+    this.updateZoom(
+      zoom,
+      this.graphic.cursorHelper.getMouseScreenPosition(event)
+    );
   }
 
-  private unproject(screenPos: Vector2): Vector3 {
-    return new Vector3(screenPos.x, screenPos.y, 1).unproject(this.camera);
-  }
+  updateZoom(zoom?: number, center?: Vector2): void {
+    if (!zoom) zoom = this.zoom;
 
-  private getMouseScreenPosition(event: MouseEvent | WheelEvent): Vector2 {
-    let mousePosition = new Vector2();
-
-    mousePosition.x =
-      (event.clientX - this.domElement.offsetLeft) /
-        this.domElement.offsetWidth -
-      1;
-    mousePosition.y =
-      -(
-        (event.clientY - this.domElement.offsetTop) /
-        this.domElement.offsetHeight
-      ) + 1;
-    return mousePosition;
-  }
-
-  private findGroundIntersection(screenPosition: Vector2): Vector3 {
-    this.rayCaster.setFromCamera(screenPosition.clone(), this.camera);
-
-    let point = new Vector3();
-    if (
-      !this.rayCaster.ray.intersectPlane(
-        new Plane(new Vector3(0, 0, 1), 0),
-        point
-      )
-    ) {
-      console.warn("Raycaster did not intersect with the plane.");
-      return null;
-    }
-
-    return point;
-  }
-
-  updateZoom(zoom: number, center?: Vector2): void {
     let aspect = window.innerWidth / window.innerHeight;
     this.camera.left = -1 / zoom / 2;
     this.camera.right = 1 / zoom / 2;
@@ -200,9 +171,5 @@ export class OrthoOrbit {
     this.zoom = zoom;
     this.updateNearFar();
     this.camera.updateProjectionMatrix();
-  }
-
-  private onWindowResize(): void {
-    this.updateZoom(this.zoom);
   }
 }

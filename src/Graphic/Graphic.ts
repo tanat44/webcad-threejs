@@ -1,21 +1,11 @@
 import {
   AmbientLight,
-  BoxGeometry,
-  BufferGeometry,
   Color,
   DepthTexture,
   DirectionalLight,
-  DoubleSide,
   GridHelper,
-  Line,
-  LineBasicMaterial,
-  Mesh,
-  MeshBasicMaterial,
-  MeshLambertMaterial,
-  PlaneGeometry,
   Scene,
   Vector2,
-  Vector3,
   WebGLRenderer,
   WebGLRenderTarget,
 } from "three";
@@ -23,14 +13,17 @@ import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader";
+import { CursorHelper } from "./CursorHelper";
 import { CustomOutlinePass } from "./CustomOutlinePass.js";
 import { OrthoCamera } from "./OrthoCamera";
+import { drawTestObject } from "./TestObject";
 
 const GRID_SIZE = 20;
 
 export class Graphic {
   scene: Scene;
   orthoCamera: OrthoCamera;
+  cursorHelper: CursorHelper;
 
   // rendering
   renderer: WebGLRenderer;
@@ -41,49 +34,11 @@ export class Graphic {
   constructor() {
     this.setupScene();
     this.setupLighting();
-    this.addTestObject();
     this.animate();
     this.onLoad();
   }
 
-  drawCube(pos: Vector3, color: string) {
-    const geometry2 = new BoxGeometry(1, 1, 1);
-    const material2 = new MeshLambertMaterial({ color: color });
-    const cube2 = new Mesh(geometry2, material2);
-    cube2.position.copy(pos);
-    this.scene.add(cube2);
-  }
-
-  drawLine(to: Vector3, color: string) {
-    const material = new LineBasicMaterial({
-      color,
-    });
-    const points = [];
-    points.push(new Vector3());
-    points.push(to);
-    const geometry = new BufferGeometry().setFromPoints(points);
-    const line = new Line(geometry, material);
-    this.scene.add(line);
-  }
-
-  drawPlane() {
-    const geometry = new PlaneGeometry(5, 5);
-    const material = new MeshBasicMaterial({ color: "pink", side: DoubleSide });
-    const plane = new Mesh(geometry, material);
-    this.scene.add(plane);
-  }
-
-  addTestObject() {
-    this.drawCube(new Vector3(0, 0, 0), "gray");
-    this.drawCube(new Vector3(10, 0, 0), "red");
-    this.drawLine(new Vector3(10, 0, 0), "red");
-    this.drawCube(new Vector3(0, 10, 0), "green");
-    this.drawLine(new Vector3(0, 10, 0), "green");
-    this.drawCube(new Vector3(0, 0, 10), "blue");
-    this.drawLine(new Vector3(0, 0, 10), "blue");
-  }
-
-  setupLighting() {
+  private setupLighting() {
     this.scene.add(new AmbientLight(0xffffff));
 
     const light1 = new DirectionalLight(0xffffff, 5);
@@ -95,7 +50,7 @@ export class Graphic {
     this.scene.add(light2);
   }
 
-  setupScene() {
+  private setupScene() {
     this.scene = new Scene();
     this.scene.background = new Color(0xf0f0f0);
     const gridHelper = new GridHelper(GRID_SIZE, GRID_SIZE);
@@ -107,6 +62,7 @@ export class Graphic {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.shadowMap.enabled = true;
     this.orthoCamera = new OrthoCamera(this);
+    this.cursorHelper = new CursorHelper(this);
 
     // post processing
     const depthTexture = new DepthTexture(
@@ -162,9 +118,10 @@ export class Graphic {
   private onLoad() {
     this.onWindowResize();
     this.orthoCamera.onLoad();
+    drawTestObject(this.scene);
   }
 
-  animate() {
+  private animate() {
     requestAnimationFrame(() => this.animate());
     this.composer.render();
   }

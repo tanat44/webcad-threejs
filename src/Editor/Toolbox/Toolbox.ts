@@ -16,6 +16,9 @@ export class Toolbox {
     this.tools.push(new MeasureTool(graphic, editor));
 
     document.addEventListener("keydown", this.onKeyDown.bind(this));
+    document.addEventListener("mousedown", this.onMouseDown.bind(this));
+    document.addEventListener("mousemove", this.onMouseMove.bind(this));
+    document.addEventListener("mouseup", this.onMouseUp.bind(this));
   }
 
   private onKeyDown(event: KeyboardEvent) {
@@ -38,6 +41,24 @@ export class Toolbox {
         this.currentTool = tool;
         return;
       }
+    }
+  }
+
+  private onMouseDown(event: MouseEvent) {
+    if (this.currentTool) {
+      this.currentTool.onMouseDown(event);
+    }
+  }
+
+  private onMouseMove(event: MouseEvent) {
+    if (this.currentTool) {
+      this.currentTool.onMouseMove(event);
+    }
+  }
+
+  private onMouseUp(event: MouseEvent) {
+    if (this.currentTool) {
+      this.currentTool.onMouseUp(event);
     }
   }
 }

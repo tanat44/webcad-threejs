@@ -15,9 +15,15 @@ export class OrthoCamera {
 
     // orbit
     this.orbit = new OrthoOrbit(this.camera, graphic);
+
+    window.addEventListener("resize", this.onWindowResize.bind(this));
   }
 
   onLoad() {
     this.orbit.updateZoom(0.05);
+  }
+
+  onWindowResize() {
+    this.orbit.updateZoom();
   }
 }
