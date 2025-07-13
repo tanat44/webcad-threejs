@@ -15,13 +15,12 @@ export class Toolbox {
     this.tools.push(new CylinderTool(graphic, editor));
     this.tools.push(new MeasureTool(graphic, editor));
 
-    document.addEventListener("keydown", this.onKeyDown.bind(this));
     document.addEventListener("mousedown", this.onMouseDown.bind(this));
     document.addEventListener("mousemove", this.onMouseMove.bind(this));
     document.addEventListener("mouseup", this.onMouseUp.bind(this));
   }
 
-  private onKeyDown(event: KeyboardEvent) {
+  public handleKeyDown(event: KeyboardEvent) {
     if (this.currentTool) {
       if (event.key === "Escape") {
         this.currentTool.deactivate();

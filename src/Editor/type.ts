@@ -1,6 +1,4 @@
-export enum ToolType {
-  Rectangle = "rectangle",
+export enum ElementType {
+  Box = "box",
   Cylinder = "cylinder",
-  Measure = "measure",
-  None = "none",
 }

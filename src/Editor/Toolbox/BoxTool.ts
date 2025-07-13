@@ -1,7 +1,7 @@
 import { BoxGeometry, Mesh, Plane, Vector3 } from "three";
 import { Graphic } from "../../Graphic/Graphic";
 import { Editor } from "../Editor";
-import { ProcessElement } from "../ProcessElement";
+import { BoxElement } from "../Element/BoxElement";
 import { ToolBase } from "./ToolBase";
 
 enum ToolState {
@@ -31,6 +31,10 @@ export class BoxTool extends ToolBase {
       this.graphic.scene.remove(this.tempObject);
       this.tempObject = null;
     }
+  }
+
+  protected override overrideMouseDown(e: MouseEvent): void {
+    // do nothing
   }
 
   protected override overrideMouseMove(e: MouseEvent): void {
@@ -81,7 +85,7 @@ export class BoxTool extends ToolBase {
     } else if (this.state === ToolState.SecondClick) {
       // create process object
       this.tempObject.material = this.editor.process.getDefaultMaterial();
-      const element = new ProcessElement(this.tempObject);
+      const element = new BoxElement(this.tempObject);
       this.editor.process.addElement(element);
 
       // deference temporary object
