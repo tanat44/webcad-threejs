@@ -39,8 +39,7 @@ export class OrthoOrbit {
   render() {}
 
   private onMouseDown(event: MouseEvent): void {
-    this.mouseDownScreen =
-      this.graphic.cursorHelper.getMouseScreenPosition(event);
+    this.mouseDownScreen = this.graphic.cursorHelper.getScreenPosition(event);
     this.viewCenter = this.graphic.cursorHelper.findGroundIntersection(
       new Vector2()
     );
@@ -50,8 +49,7 @@ export class OrthoOrbit {
   private onMouseMove(event: MouseEvent): void {
     if (!this.mouseDownScreen) return;
 
-    const newScreenPos =
-      this.graphic.cursorHelper.getMouseScreenPosition(event);
+    const newScreenPos = this.graphic.cursorHelper.getScreenPosition(event);
     const newWorldPos = this.graphic.cursorHelper.unproject(newScreenPos);
     if (!newWorldPos) return;
 
@@ -139,20 +137,18 @@ export class OrthoOrbit {
     } else {
       zoom /= 1.1; // Zoom out
     }
-    this.updateZoom(
-      zoom,
-      this.graphic.cursorHelper.getMouseScreenPosition(event)
-    );
+    this.updateZoom(zoom, this.graphic.cursorHelper.getScreenPosition(event));
   }
 
   updateZoom(zoom?: number, center?: Vector2): void {
     if (!zoom) zoom = this.zoom;
 
     let aspect = window.innerWidth / window.innerHeight;
-    this.camera.left = -1 / zoom / 2;
-    this.camera.right = 1 / zoom / 2;
-    this.camera.top = 1 / zoom / 2 / aspect;
-    this.camera.bottom = -1 / zoom / 2 / aspect;
+    const halfZoom = zoom / 2;
+    this.camera.left = -1 / halfZoom;
+    this.camera.right = 1 / halfZoom;
+    this.camera.top = 1 / halfZoom / aspect;
+    this.camera.bottom = -1 / halfZoom / aspect;
 
     // if (center) {
     //   const oldPos = this.getMouseWorldPosition(center);

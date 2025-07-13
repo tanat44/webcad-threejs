@@ -16,34 +16,39 @@ export class CursorHelper {
     );
   }
 
-  getMouseScreenPosition(event: MouseEvent | WheelEvent): Vector2 {
+  getScreenPosition(event: MouseEvent | WheelEvent): Vector2 {
     let mousePosition = new Vector2();
     const { domElement } = this.graphic.renderer;
 
     mousePosition.x =
-      (event.clientX - domElement.offsetLeft) / domElement.offsetWidth - 1;
+      ((event.clientX - domElement.offsetLeft) * 2) / domElement.offsetWidth -
+      1;
     mousePosition.y =
-      -((event.clientY - domElement.offsetTop) / domElement.offsetHeight) + 1;
+      -(
+        ((event.clientY - domElement.offsetTop) * 2) /
+        domElement.offsetHeight
+      ) + 1;
     return mousePosition;
   }
 
   findGroundIntersection(screenPosition: Vector2): Vector3 {
+    return this.findPlaneIntersection(
+      screenPosition,
+      new Plane(new Vector3(0, 0, 1), 0)
+    );
+  }
+
+  findPlaneIntersection(screenPosition: Vector2, plane: Plane): Vector3 {
     this.rayCaster.setFromCamera(
       screenPosition.clone(),
       this.graphic.orthoCamera.camera
     );
 
     let point = new Vector3();
-    if (
-      !this.rayCaster.ray.intersectPlane(
-        new Plane(new Vector3(0, 0, 1), 0),
-        point
-      )
-    ) {
+    if (!this.rayCaster.ray.intersectPlane(plane, point)) {
       console.warn("Raycaster did not intersect with the plane.");
       return null;
     }
-
     return point;
   }
 }
