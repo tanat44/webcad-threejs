@@ -1,12 +1,23 @@
 export class Button {
   dom: HTMLElement;
   active: boolean = false;
+  shortcut: string;
   callback: () => void;
 
-  constructor(name: string, parentDom: HTMLElement, callback: () => void) {
-    this.dom = document.createElement("button");
-    this.dom.textContent = name;
-    this.callback = callback;
+  constructor(name: string, shortcut: string, parentDom: HTMLElement) {
+    this.dom = document.createElement("div");
+    this.dom.classList.add("button");
+    this.dom.classList.add("disableSelection");
+    this.shortcut = shortcut;
+
+    // build text
+    let text = `${name} (${shortcut})`;
+    if (name.includes(shortcut)) {
+      const parts = name.split(shortcut);
+      text = `${parts[0]}<b>${shortcut}</b>${parts[1]}`;
+    }
+    this.dom.innerHTML = text;
+
     this.dom.addEventListener("click", this.onClick.bind(this));
     parentDom.appendChild(this.dom);
   }
@@ -18,6 +29,10 @@ export class Button {
 
   onClick() {
     this.setActive(!this.active);
-    this.callback();
+    if (this.callback) this.callback();
+  }
+
+  setCallback(callback: () => void) {
+    this.callback = callback;
   }
 }

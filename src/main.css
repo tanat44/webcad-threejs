@@ -1,8 +1,11 @@
-body, div, button, li {
-  font-family: 'Courier New', Courier, monospace;
+body,
+div,
+button,
+li {
+  font-family: "Courier New", Courier, monospace;
 }
 
-button {
+.button {
   border: none;
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 5px;
@@ -22,26 +25,36 @@ button {
   gap: 1rem;
 }
 
-.row{
+.row {
   display: flex;
   flex-direction: row;
-  gap: 5px
+  gap: 5px;
 }
 
-.column{
+.column {
   display: flex;
   flex-direction: column;
-  gap: 5px
+  gap: 5px;
 }
 
 .flexWrap {
   flex-wrap: wrap;
 }
 
-.center{
+.center {
   text-align: center;
 }
 
 .activeButton {
   background-color: #ffac7584;
+}
+
+.disableSelection {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  outline: 0;
 }
