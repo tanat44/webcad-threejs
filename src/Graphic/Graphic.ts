@@ -42,8 +42,8 @@ export class Graphic {
     this.setupScene();
     this.setupLighting();
     this.addTestObject();
-    this.onWindowResize();
     this.animate();
+    this.onLoad();
   }
 
   drawCube(pos: Vector3, color: string) {
@@ -152,11 +152,16 @@ export class Graphic {
     });
   }
 
-  onWindowResize() {
+  private onWindowResize() {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.composer.setSize(window.innerWidth, window.innerHeight);
     this.effectFXAA.setSize(window.innerWidth, window.innerHeight);
     this.customOutline.setSize(window.innerWidth, window.innerHeight);
+  }
+
+  private onLoad() {
+    this.onWindowResize();
+    this.orthoCamera.onLoad();
   }
 
   animate() {
