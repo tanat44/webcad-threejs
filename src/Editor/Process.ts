@@ -1,9 +1,10 @@
-import { Material, MeshLambertMaterial } from "three";
+import { BufferGeometry, Material, MeshLambertMaterial } from "three";
+import { ADDITION, Evaluator, SUBTRACTION } from "three-bvh-csg";
 import { Graphic } from "../Graphic/Graphic";
 import { Editor } from "./Editor";
 import { BoxElement } from "./Element/BoxElement";
 import { ElementBase } from "./Element/ElementBase";
-import { ElementType } from "./type";
+import { ElementType, ProcessType } from "./type";
 
 const STORAGE_KEY = "savedElements";
 const OPACITY = 0.5;
@@ -80,5 +81,36 @@ export class Process {
   getElement(id: number) {
     const element = this.elements.find((el) => el.mesh.id === id);
     return element;
+  }
+
+  mergeElement(): BufferGeometry {
+    const evaluator = new Evaluator();
+    if (this.elements.length === 0) return undefined;
+    if (this.elements.length === 1) return this.elements[0].mesh.geometry;
+
+    let brush = this.elements[0].getBrush();
+    for (let i = 1; i < this.elements.length; i++) {
+      const element = this.elements[i];
+      if (element.processType === ProcessType.Disable) continue;
+      const thisBrush = element.getBrush();
+      brush = evaluator.evaluate(
+        brush,
+        thisBrush,
+        element.processType === ProcessType.Add ? ADDITION : SUBTRACTION
+      );
+    }
+    return brush.geometry;
+  }
+
+  hideElement() {
+    this.elements.forEach((element) => {
+      element.mesh.visible = false;
+    });
+  }
+
+  showElement() {
+    this.elements.forEach((element) => {
+      element.mesh.visible = true;
+    });
   }
 }

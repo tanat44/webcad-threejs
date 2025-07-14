@@ -1,4 +1,5 @@
 import { Mesh } from "three";
+import { Brush } from "three-bvh-csg";
 import { eulerToVector3 } from "../../Graphic/Math";
 import { Editor } from "../Editor";
 import { ElementType, ProcessType } from "../type";
@@ -36,5 +37,14 @@ export abstract class ElementBase {
     } else if (type === ProcessType.Subtract) {
       this.mesh.material = this.editor.process.subtractMaterial;
     }
+  }
+
+  getBrush(): Brush {
+    const brush = new Brush(this.mesh.geometry);
+    brush.position.copy(this.mesh.position);
+    brush.scale.copy(this.mesh.scale);
+    brush.rotation.copy(this.mesh.rotation);
+    brush.updateMatrixWorld();
+    return brush;
   }
 }

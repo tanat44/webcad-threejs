@@ -18,7 +18,7 @@ export class KeyShortcut {
         this.editor.process.load();
       }
     } else if (event.key === "Tab") {
-      console.log("afds");
+      this.editor.toggleMode();
     } else {
       this.editor.toolbox.handleKeyDown(event);
     }
