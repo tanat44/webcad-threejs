@@ -3,6 +3,7 @@ import { Editor } from "../Editor";
 import { BoxTool } from "./BoxTool";
 import { CylinderTool } from "./CylinderTool";
 import { MeasureTool } from "./MeasureTool";
+import { MoveTool } from "./MoveTool";
 import { ProcessTool } from "./ProcessTool";
 import { ToolBase } from "./ToolBase";
 
@@ -12,9 +13,14 @@ export class Toolbox {
 
   constructor(graphic: Graphic, editor: Editor) {
     this.tools = [];
-    this.tools.push(new ProcessTool(graphic, editor));
+
+    // create tools
     this.tools.push(new BoxTool(graphic, editor));
     this.tools.push(new CylinderTool(graphic, editor));
+
+    // edit tools
+    this.tools.push(new ProcessTool(graphic, editor));
+    this.tools.push(new MoveTool(graphic, editor));
     this.tools.push(new MeasureTool(graphic, editor));
 
     document.addEventListener("mousedown", this.onMouseDown.bind(this));
