@@ -10,7 +10,6 @@ export class KeyShortcut {
 
   private onKeyDown(event: KeyboardEvent) {
     if (event.metaKey || event.ctrlKey) {
-      // handle meta
       if (event.key === "s") {
         event.preventDefault();
         this.editor.process.save();
@@ -18,6 +17,8 @@ export class KeyShortcut {
         event.preventDefault();
         this.editor.process.load();
       }
+    } else if (event.key === "Tab") {
+      console.log("afds");
     } else {
       this.editor.toolbox.handleKeyDown(event);
     }

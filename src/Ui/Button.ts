@@ -11,7 +11,7 @@ export class Button {
     this.shortcut = shortcut;
 
     // build text
-    let text = `${name} (${shortcut})`;
+    let text = `${name}(<b>${shortcut}</b>)`;
     if (name.includes(shortcut)) {
       const parts = name.split(shortcut);
       text = `${parts[0]}<b>${shortcut}</b>${parts[1]}`;

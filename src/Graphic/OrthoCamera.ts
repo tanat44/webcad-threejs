@@ -20,7 +20,7 @@ export class OrthoCamera {
   }
 
   onLoad() {
-    this.orbit.updateZoom(0.05);
+    this.orbit.updateZoom(0.1);
   }
 
   onWindowResize() {

@@ -85,7 +85,7 @@ export class BoxTool extends ToolBase {
     } else if (this.state === ToolState.SecondClick) {
       // create process object
       this.tempObject.material = this.editor.process.getDefaultMaterial();
-      const element = new BoxElement(this.tempObject);
+      const element = new BoxElement(this.editor, this.tempObject);
       this.editor.process.addElement(element);
 
       // deference temporary object

@@ -1,4 +1,12 @@
-import { Plane, Raycaster, Vector2, Vector3 } from "three";
+import {
+  Intersection,
+  Object3D,
+  Object3DEventMap,
+  Plane,
+  Raycaster,
+  Vector2,
+  Vector3,
+} from "three";
 import { Graphic } from "./Graphic";
 
 export class CursorHelper {
@@ -50,5 +58,33 @@ export class CursorHelper {
       return null;
     }
     return point;
+  }
+
+  findIntersections(
+    screenPosition: Vector2
+  ): Intersection<Object3D<Object3DEventMap>>[] {
+    this.rayCaster.setFromCamera(
+      screenPosition.clone(),
+      this.graphic.orthoCamera.camera
+    );
+    const intersects = this.rayCaster.intersectObjects(
+      this.graphic.scene.children,
+      true
+    );
+    return intersects;
+  }
+
+  findIntersection(
+    screenPosition: Vector2
+  ): Intersection<Object3D<Object3DEventMap>> | undefined {
+    this.rayCaster.setFromCamera(
+      screenPosition.clone(),
+      this.graphic.orthoCamera.camera
+    );
+    const intersects = this.rayCaster.intersectObjects(
+      this.graphic.scene.children,
+      true
+    );
+    return intersects[0] || undefined;
   }
 }

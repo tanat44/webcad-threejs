@@ -3,6 +3,7 @@ import { Editor } from "../Editor";
 import { BoxTool } from "./BoxTool";
 import { CylinderTool } from "./CylinderTool";
 import { MeasureTool } from "./MeasureTool";
+import { ProcessTool } from "./ProcessTool";
 import { ToolBase } from "./ToolBase";
 
 export class Toolbox {
@@ -11,6 +12,7 @@ export class Toolbox {
 
   constructor(graphic: Graphic, editor: Editor) {
     this.tools = [];
+    this.tools.push(new ProcessTool(graphic, editor));
     this.tools.push(new BoxTool(graphic, editor));
     this.tools.push(new CylinderTool(graphic, editor));
     this.tools.push(new MeasureTool(graphic, editor));
@@ -25,17 +27,17 @@ export class Toolbox {
       if (event.key === "Escape") {
         this.currentTool.deactivate();
       } else {
-        this.currentTool.deactivate();
-        this.activate(event.key);
+        this.tryActivate(event.key);
       }
     } else {
-      this.activate(event.key);
+      this.tryActivate(event.key);
     }
   }
 
-  private activate(key: string) {
+  private tryActivate(key: string) {
     for (const tool of this.tools) {
       if (tool.button.shortcut === key) {
+        this.currentTool?.deactivate();
         tool.activate();
         this.currentTool = tool;
         return;

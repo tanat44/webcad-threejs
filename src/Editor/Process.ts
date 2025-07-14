@@ -6,18 +6,34 @@ import { ElementBase } from "./Element/ElementBase";
 import { ElementType } from "./type";
 
 const STORAGE_KEY = "savedElements";
+const OPACITY = 0.5;
 export class Process {
-  graphic: Graphic;
-  editor: Editor;
+  readonly graphic: Graphic;
+  readonly editor: Editor;
+  readonly addMaterial: Material;
+  readonly subtractMaterial: Material;
+  readonly disableMaterial: Material;
   elements: ElementBase[] = [];
-
-  private defaultMaterial: Material;
 
   constructor(graphic: Graphic, editor: Editor) {
     this.graphic = graphic;
     this.editor = editor;
+    this.addMaterial = new MeshLambertMaterial({
+      color: 0x2f00ff,
+      opacity: OPACITY,
+      transparent: true,
+    });
+    this.subtractMaterial = new MeshLambertMaterial({
+      color: 0xff6459,
+      opacity: OPACITY,
+      transparent: true,
+    });
+    this.disableMaterial = new MeshLambertMaterial({
+      color: 0xa6a6a6,
+      opacity: OPACITY,
+      transparent: true,
+    });
     this.elements = [];
-    this.defaultMaterial = new MeshLambertMaterial({ color: 0x2f00ff });
   }
 
   addElement(element: ElementBase) {
@@ -26,7 +42,7 @@ export class Process {
   }
 
   getDefaultMaterial() {
-    return this.defaultMaterial;
+    return this.disableMaterial;
   }
 
   save() {
@@ -59,5 +75,10 @@ export class Process {
       return BoxElement.deserialize(object, this.editor);
     }
     throw new Error(`Can't deserialize element type: ${object.elementType}`);
+  }
+
+  getElement(id: number) {
+    const element = this.elements.find((el) => el.mesh.id === id);
+    return element;
   }
 }

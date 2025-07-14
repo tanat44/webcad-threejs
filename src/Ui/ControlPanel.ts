@@ -5,15 +5,24 @@ export class ControlPanel {
   graphic: Graphic;
 
   // buttons
+  processButton: Button;
   boxButton: Button;
   cylinderButton: Button;
+  moveButton: Button;
   measureButton: Button;
 
   constructor(graphic: Graphic) {
     this.graphic = graphic;
-    const dom = document.getElementById("controlPanel");
-    this.boxButton = new Button("box", "b", dom);
-    this.cylinderButton = new Button("cylinder", "c", dom);
-    this.measureButton = new Button("measure", "m", dom);
+
+    // create tool
+    const createDom = document.getElementById("createTool");
+    this.boxButton = new Button("box", "b", createDom);
+    this.cylinderButton = new Button("cylinder", "c", createDom);
+
+    // edit tool
+    const editDom = document.getElementById("editTool");
+    this.processButton = new Button("process", "p", editDom);
+    this.moveButton = new Button("move", "m", editDom);
+    this.measureButton = new Button("measure", "s", editDom);
   }
 }

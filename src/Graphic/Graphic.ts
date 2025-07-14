@@ -16,7 +16,6 @@ import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader";
 import { CursorHelper } from "./CursorHelper";
 import { CustomOutlinePass } from "./CustomOutlinePass.js";
 import { OrthoCamera } from "./OrthoCamera";
-import { drawTestObject } from "./TestObject";
 
 const GRID_SIZE = 20;
 
@@ -118,7 +117,7 @@ export class Graphic {
   private onLoad() {
     this.onWindowResize();
     this.orthoCamera.onLoad();
-    drawTestObject(this.scene);
+    // drawTestObject(this.scene);
   }
 
   private animate() {

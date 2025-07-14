@@ -6,7 +6,7 @@ import { Editor } from "../Editor";
 export class ToolBase {
   protected graphic: Graphic;
   protected editor: Editor;
-  button: Button;
+  button?: Button;
 
   protected toolActive: boolean = false;
   protected static tempMaterial: Material = new MeshLambertMaterial({
@@ -15,19 +15,19 @@ export class ToolBase {
     opacity: 0.5,
   });
 
-  constructor(graphic: Graphic, editor: Editor, button: Button) {
+  constructor(graphic: Graphic, editor: Editor, button?: Button) {
     this.graphic = graphic;
     this.editor = editor;
     this.button = button;
   }
 
   activate() {
-    this.button.setActive(true);
+    this.button?.setActive(true);
     this.toolActive = true;
   }
 
   deactivate() {
-    this.button.setActive(false);
+    this.button?.setActive(false);
     this.toolActive = false;
   }
 
@@ -37,7 +37,7 @@ export class ToolBase {
   }
 
   protected overrideMouseDown(e: MouseEvent) {
-    console.log("mouse down in tool base", e);
+    console.log("undefined mousedown", e);
   }
 
   onMouseMove(e: MouseEvent) {
@@ -46,7 +46,7 @@ export class ToolBase {
   }
 
   protected overrideMouseMove(e: MouseEvent) {
-    console.log("Mouse move in tool base", e);
+    console.log("undefined mousemove", e);
   }
 
   onMouseUp(e: MouseEvent) {
@@ -55,6 +55,6 @@ export class ToolBase {
   }
 
   protected overrideMouseUp(e: MouseEvent) {
-    console.log("Mouse up in tool base", e);
+    console.log("undefined mouseup", e);
   }
 }
