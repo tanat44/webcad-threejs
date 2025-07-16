@@ -8,3 +8,5 @@ export enum ProcessType {
   Subtract = "subtract",
   Disable = "disable",
 }
+
+export type EventName = "ElementUpdate";

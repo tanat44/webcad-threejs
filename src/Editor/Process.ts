@@ -40,6 +40,9 @@ export class Process {
   addElement(element: ElementBase) {
     this.elements.push(element);
     this.graphic.scene.add(element.mesh);
+
+    // update ui
+    this.editor.ui.processPanel.addElement(element);
   }
 
   getDefaultMaterial() {
@@ -59,15 +62,16 @@ export class Process {
     this.elements.forEach((element) => {
       this.graphic.scene.remove(element.mesh);
       element.mesh.geometry.dispose();
+      this.editor.ui.processPanel.removeElement(element);
     });
     this.elements = [];
+
     // load from localStorage
     const text = localStorage.getItem(STORAGE_KEY);
     const objects = JSON.parse(text);
     for (const object of objects) {
       const element = this.deserializeElement(object);
-      this.elements.push(element);
-      this.graphic.scene.add(element.mesh);
+      this.addElement(element);
     }
   }
 

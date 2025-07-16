@@ -22,6 +22,22 @@ li {
   gap: 0.5rem;
 }
 
+#processPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: absolute;
+  z-index: 999;
+  top: 2rem;
+  left: 2rem;
+}
+
+.processElement {
+  height: 0.6rem;
+  line-height: 0.6rem;
+  margin-left: 0;
+}
+
 .row {
   display: flex;
   flex-direction: row;

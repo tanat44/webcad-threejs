@@ -1,9 +1,11 @@
 import { Mesh, MeshLambertMaterial } from "three";
 import { Graphic } from "../Graphic/Graphic";
 import { Ui } from "../Ui/Ui";
+import { ElementBase } from "./Element/ElementBase";
 import { KeyShortcut } from "./KeyShortcut";
 import { Process } from "./Process";
 import { Toolbox } from "./Toolbox/Toolbox";
+import { EventName } from "./type";
 
 enum EditorMode {
   Edit,
@@ -52,5 +54,9 @@ export class Editor {
       this.process.showElement();
       this.mode = EditorMode.Edit;
     }
+  }
+
+  publishElementUpdate(eventName: EventName, element: ElementBase) {
+    document.dispatchEvent(new CustomEvent(eventName, { detail: element }));
   }
 }

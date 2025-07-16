@@ -24,7 +24,7 @@ export class ProcessTool extends ToolBase {
     const element = this.editor.process.getElement(intersect.object.id);
     if (!element) return;
 
-    console.log(element);
+    const previousProcessType = element.processType;
     if (e.shiftKey) {
       if (element.processType === ProcessType.Subtract) {
         element.changeProcessType(ProcessType.Disable);
@@ -37,6 +37,10 @@ export class ProcessTool extends ToolBase {
       } else if (element.processType === ProcessType.Disable) {
         element.changeProcessType(ProcessType.Subtract);
       }
+    }
+
+    if (previousProcessType !== element.processType) {
+      this.editor.publishElementUpdate("ElementUpdate", element);
     }
   }
 }
