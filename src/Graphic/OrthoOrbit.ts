@@ -21,6 +21,7 @@ export class OrthoOrbit {
   private mouseDownScreen: Vector2 | null = null;
   private viewCenter: Vector3 | null = null;
   private zoom: number = 1;
+  private enableControl: boolean = true;
 
   constructor(camera: OrthographicCamera, graphic: Graphic) {
     this.graphic = graphic;
@@ -39,6 +40,7 @@ export class OrthoOrbit {
   render() {}
 
   private onMouseDown(event: MouseEvent): void {
+    if (!this.enableControl) return;
     this.mouseDownScreen = this.graphic.cursorHelper.getScreenPosition(event);
     this.viewCenter = this.graphic.cursorHelper.findGroundIntersection(
       new Vector2()
@@ -47,7 +49,7 @@ export class OrthoOrbit {
   }
 
   private onMouseMove(event: MouseEvent): void {
-    if (!this.mouseDownScreen) return;
+    if (!this.mouseDownScreen || !this.enableControl) return;
 
     const newScreenPos = this.graphic.cursorHelper.getScreenPosition(event);
     const newWorldPos = this.graphic.cursorHelper.unproject(newScreenPos);
@@ -126,6 +128,7 @@ export class OrthoOrbit {
   }
 
   private onMouseUp(event: MouseEvent): void {
+    if (!this.enableControl) return;
     this.mouseDownScreen = null;
   }
 
@@ -167,5 +170,9 @@ export class OrthoOrbit {
     this.zoom = zoom;
     this.updateNearFar();
     this.camera.updateProjectionMatrix();
+  }
+
+  setEnableControl(enable: boolean) {
+    this.enableControl = enable;
   }
 }

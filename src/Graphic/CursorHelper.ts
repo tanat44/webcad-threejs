@@ -61,30 +61,26 @@ export class CursorHelper {
   }
 
   findIntersections(
-    screenPosition: Vector2
+    screenPosition: Vector2,
+    objects?: Object3D<Object3DEventMap>[]
   ): Intersection<Object3D<Object3DEventMap>>[] {
     this.rayCaster.setFromCamera(
       screenPosition.clone(),
       this.graphic.orthoCamera.camera
     );
     const intersects = this.rayCaster.intersectObjects(
-      this.graphic.scene.children,
+      objects ?? this.graphic.scene.children,
+
       true
     );
     return intersects;
   }
 
   findIntersection(
-    screenPosition: Vector2
+    screenPosition: Vector2,
+    objects?: Object3D<Object3DEventMap>[]
   ): Intersection<Object3D<Object3DEventMap>> | undefined {
-    this.rayCaster.setFromCamera(
-      screenPosition.clone(),
-      this.graphic.orthoCamera.camera
-    );
-    const intersects = this.rayCaster.intersectObjects(
-      this.graphic.scene.children,
-      true
-    );
+    const intersects = this.findIntersections(screenPosition, objects);
     return intersects[0] || undefined;
   }
 }

@@ -7,8 +7,8 @@ export class ToolBase {
   protected graphic: Graphic;
   protected editor: Editor;
   button?: Button;
+  isActive: boolean = false;
 
-  protected toolActive: boolean = false;
   protected static tempMaterial: Material = new MeshLambertMaterial({
     color: 0x0f97ff,
     transparent: true,
@@ -23,16 +23,16 @@ export class ToolBase {
 
   activate() {
     this.button?.setActive(true);
-    this.toolActive = true;
+    this.isActive = true;
   }
 
   deactivate() {
     this.button?.setActive(false);
-    this.toolActive = false;
+    this.isActive = false;
   }
 
   onMouseDown(e: MouseEvent) {
-    if (!this.toolActive) return;
+    if (!this.isActive) return;
     this.overrideMouseDown(e);
   }
 
@@ -41,7 +41,7 @@ export class ToolBase {
   }
 
   onMouseMove(e: MouseEvent) {
-    if (!this.toolActive) return;
+    if (!this.isActive) return;
     this.overrideMouseMove(e);
   }
 
@@ -50,7 +50,7 @@ export class ToolBase {
   }
 
   onMouseUp(e: MouseEvent) {
-    if (!this.toolActive) return;
+    if (!this.isActive) return;
     this.overrideMouseUp(e);
   }
 

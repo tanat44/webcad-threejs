@@ -1,20 +1,28 @@
-import { BufferGeometry, Material, MeshLambertMaterial } from "three";
+import {
+  BufferGeometry,
+  Material,
+  MeshBasicMaterial,
+  MeshLambertMaterial,
+} from "three";
 import { ADDITION, Evaluator, SUBTRACTION } from "three-bvh-csg";
 import { Graphic } from "../Graphic/Graphic";
 import { Editor } from "./Editor";
 import { BoxElement } from "./Element/BoxElement";
 import { ElementBase } from "./Element/ElementBase";
+import { ElementCollection } from "./Element/ElementCollection";
 import { ElementType, ProcessType } from "./type";
 
 const STORAGE_KEY = "savedElements";
-const OPACITY = 0.5;
+const OPACITY = 1.0;
 export class Process {
   readonly graphic: Graphic;
   readonly editor: Editor;
   readonly addMaterial: Material;
   readonly subtractMaterial: Material;
   readonly disableMaterial: Material;
-  elements: ElementBase[] = [];
+  readonly indicatorMaterial: Material;
+
+  elements: ElementCollection;
 
   constructor(graphic: Graphic, editor: Editor) {
     this.graphic = graphic;
@@ -34,7 +42,13 @@ export class Process {
       opacity: OPACITY,
       transparent: true,
     });
-    this.elements = [];
+    this.indicatorMaterial = new MeshBasicMaterial({
+      color: 0xfcfc03,
+      opacity: OPACITY - 0.2,
+      transparent: true,
+      side: 2,
+    });
+    this.elements = new ElementCollection();
   }
 
   addElement(element: ElementBase) {
@@ -64,7 +78,7 @@ export class Process {
       element.mesh.geometry.dispose();
       this.editor.ui.processPanel.removeElement(element);
     });
-    this.elements = [];
+    this.elements = new ElementCollection();
 
     // load from localStorage
     const text = localStorage.getItem(STORAGE_KEY);

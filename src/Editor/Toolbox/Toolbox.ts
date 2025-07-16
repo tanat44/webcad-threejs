@@ -43,6 +43,12 @@ export class Toolbox {
   private tryActivate(key: string) {
     for (const tool of this.tools) {
       if (tool.button.shortcut === key) {
+        // deactivate if try to activate the same tool
+        if (this.currentTool === tool && tool.isActive) {
+          tool.deactivate();
+          return;
+        }
+
         this.currentTool?.deactivate();
         tool.activate();
         this.currentTool = tool;
