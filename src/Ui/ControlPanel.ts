@@ -9,6 +9,7 @@ export class ControlPanel {
   boxButton: Button;
   cylinderButton: Button;
   moveButton: Button;
+  stretchButton: Button;
   measureButton: Button;
 
   constructor(graphic: Graphic) {
@@ -17,12 +18,13 @@ export class ControlPanel {
     // create tool
     const createDom = document.getElementById("createTool");
     this.boxButton = new Button("box", "b", createDom);
-    this.cylinderButton = new Button("cylinder", "c", createDom);
+    // this.cylinderButton = new Button("cylinder", "c", createDom);
 
     // edit tool
     const editDom = document.getElementById("editTool");
     this.processButton = new Button("process", "p", editDom);
     this.moveButton = new Button("move", "m", editDom);
-    this.measureButton = new Button("measure", "s", editDom);
+    this.stretchButton = new Button("stretch", "t", editDom);
+    // this.measureButton = new Button("measure", "s", editDom);
   }
 }

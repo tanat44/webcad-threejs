@@ -5,6 +5,7 @@ import { CylinderTool } from "./CylinderTool";
 import { MeasureTool } from "./MeasureTool";
 import { MoveTool } from "./MoveTool";
 import { ProcessTool } from "./ProcessTool";
+import { StretchTool } from "./StretchTool";
 import { ToolBase } from "./ToolBase";
 
 export class Toolbox {
@@ -21,6 +22,7 @@ export class Toolbox {
     // edit tools
     this.tools.push(new ProcessTool(graphic, editor));
     this.tools.push(new MoveTool(graphic, editor));
+    this.tools.push(new StretchTool(graphic, editor));
     this.tools.push(new MeasureTool(graphic, editor));
 
     document.addEventListener("mousedown", this.onMouseDown.bind(this));
@@ -42,7 +44,7 @@ export class Toolbox {
 
   private tryActivate(key: string) {
     for (const tool of this.tools) {
-      if (tool.button.shortcut === key) {
+      if (tool.button?.shortcut === key) {
         // deactivate if try to activate the same tool
         if (this.currentTool === tool && tool.isActive) {
           tool.deactivate();

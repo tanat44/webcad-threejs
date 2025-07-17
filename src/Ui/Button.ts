@@ -14,7 +14,7 @@ export class Button {
     let text = `${name}(<b>${shortcut}</b>)`;
     if (name.includes(shortcut)) {
       const parts = name.split(shortcut);
-      text = `${parts[0]}<b>${shortcut}</b>${parts[1]}`;
+      text = `${parts[0]}<b>${shortcut}</b>${parts.slice(1).join("")}`;
     }
     this.dom.innerHTML = text;
 

@@ -40,7 +40,6 @@ export class BoxTool extends ToolBase {
   protected override overrideMouseMove(e: MouseEvent): void {
     if (!this.tempObject) {
       const box = new BoxGeometry(1, 1, 1);
-      box.translate(0, 0, 0.5);
       this.tempObject = new Mesh(box, ToolBase.tempMaterial);
       this.graphic.scene.add(this.tempObject);
     }
@@ -52,7 +51,7 @@ export class BoxTool extends ToolBase {
         this.graphic.cursorHelper.findGroundIntersection(mousePosition);
       pos.x = Math.round(pos.x);
       pos.y = Math.round(pos.y);
-      pos.z = Math.round(pos.z);
+      pos.z = Math.round(pos.z) + this.tempObject.scale.z / 2;
       this.tempObject.position.copy(pos);
     } else if (this.state === ToolState.FirstClick) {
       // adjust z scale
@@ -61,6 +60,7 @@ export class BoxTool extends ToolBase {
         new Plane(new Vector3(0, -1, 0), this.tempObject.position.y)
       );
       this.tempObject.scale.z = Math.round(pos.z);
+      this.tempObject.position.z = this.tempObject.scale.z / 2;
     } else if (this.state === ToolState.SecondClick) {
       // adjust x and y scale
       const zPlane = new Plane(new Vector3(0, 0, 1));

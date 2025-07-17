@@ -10,7 +10,6 @@ export class BoxElement extends ElementBase {
 
   static deserialize(object: any, editor: Editor): BoxElement {
     const geometry = new BoxGeometry(1, 1, 1);
-    geometry.translate(0, 0, 0.5);
     const mesh = new Mesh(geometry, editor.process.getDefaultMaterial());
     mesh.position.set(object.position.x, object.position.y, object.position.z);
     mesh.scale.set(object.scale.x, object.scale.y, object.scale.z);
